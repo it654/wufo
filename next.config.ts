@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
         hostname: 'cdn.sanity.io', // Cho phép ảnh từ Sanity
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com', // Cho phép ảnh Unsplash
+      },
     ],
   },
 };

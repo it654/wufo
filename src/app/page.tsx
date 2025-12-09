@@ -1,39 +1,24 @@
-
 import Link from "next/link";
-
-// Import file SCSS vừa tạo
+import { FaCloudUploadAlt } from "react-icons/fa";
+// Import file style module
 import styles from './home.module.scss';
 import { client } from "../sanity/lib/client";
 import VideoCard from "../components/video/VideoCard";
-import { Play } from "lucide-react";
-import { urlForImage } from "../sanity/lib/image";
-const CATEGORY_TITLES: Record<string, string> = {
-  'deale': 'Deale With Invasive Wild Boars',
-  'hunting': 'Hunting Documentary',
-  'wild': 'Wild Boar',
-  'farmingDoc': 'Farming Documentary',
-  'farmingTech': 'Farming Technology',
-  'automatic': 'Automatic Machines That Are At Another Level',
-  'agriculture': 'Modern Agriculture Machine',
-  'food': 'Food Processing',
-  'animal': 'Modern Animal Husbandry',
-  'agricultureTech': 'Agriculture Harvesting Technology',
-  'latest': 'Latest Footage' // Mặc định cho mục mới nhất
-};
+import ContactPage from "./contact/page";
+import SubmitVideo from "../components/ui/SubmitVideo/SubmitVideo";
+import VideoUploadForm from "../components/ui/VideoUploadForm/VideoUploadForm";
+import dynamic from 'next/dynamic';
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: true });
 
 
-// 1. Hàm lấy danh sách tất cả các Category đang có video
+// --- DATA FETCHING ---
 async function getAllCategories() {
-  // Query này lấy tất cả category unique
   const query = `*[_type == "archiveVideo" && defined(category)].category`;
   const categories = await client.fetch(query, {}, { cache: 'no-store' });
-  
-  // Lọc trùng lặp (Set) và loại bỏ null
   const uniqueCategories = [...new Set(categories)].filter(Boolean) as string[];
-  return uniqueCategories.sort(); // Sắp xếp A-Z
+  return uniqueCategories.sort();
 }
 
-// 2. Hàm lấy video theo category (Giữ nguyên)
 async function getVideosByCategory(category: string) {
   const query = `*[_type == "archiveVideo" && category == "${category}"] | order(recordedAt desc) [0...4] {
     _id, title, slug, category, thumbnail, recordedAt,
@@ -42,7 +27,6 @@ async function getVideosByCategory(category: string) {
   try { return await client.fetch(query, {}, { cache: 'no-store' }); } catch (error) { return []; }
 }
 
-// 3. Hàm lấy Latest Footage (Giữ nguyên)
 async function getLatestVideos() {
   const query = `*[_type == "archiveVideo"] | order(recordedAt desc) [0...8] {
     _id, title, slug, category, thumbnail, recordedAt,
@@ -51,24 +35,88 @@ async function getLatestVideos() {
   try { return await client.fetch(query, {}, { cache: 'no-store' }); } catch (error) { return []; }
 }
 
-// 4. Component hiển thị 1 Section (Tự động lấy dữ liệu bên trong)
-// Chúng ta biến nó thành Async Component để tự fetch dữ liệu của chính nó
-const DynamicVideoSection = async ({ category }: { category: string }) => {
-  const videos = await getVideosByCategory(category);
- const displayTitle = CATEGORY_TITLES[category] || category.toUpperCase();  
-  console.log(displayTitle);
-  
+// --- COMPONENTS ---
+
+// 1. Hero Section
+const HeroSection = ({ heroVideo }: { heroVideo: any }) => {
+  const VIDEO_ID = "cbQvj9Ug-7Y"
+
+  return (
+    <section className={styles.heroSection}>
+      <div className={styles.videoBackground}>
+        <ReactPlayer
+          src={`https://www.youtube.com/watch?v=${VIDEO_ID}`}
+          playing={true}     // Tự động chạy
+          loop={true}        // Lặp lại
+          muted={true}       // Tắt tiếng (Bắt buộc để autoplay)
+          width="100%"
+          height="100%"
+          controls={false}   // Ẩn điều khiển
+          config={{
+            youtube: {
+              playerVars: {
+                showinfo: 0,
+                modestbranding: 1,
+                controls: 0,
+                rel: 0, // Không gợi ý video kênh khác
+                disablekb: 1, // Tắt phím tắt
+                iv_load_policy: 3 // Tắt chú thích
+              }
+            }
+          }}
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%) scale(1.5)', // Scale to lên để che 2 viền đen nếu có
+            pointerEvents: 'none' // Không cho user bấm vào video nền
+          }}
+        />
+      </div>
+
+      <div className={styles.overlay}></div>
+
+      <div className={styles.heroContent}>
+        <h1>
+          KHO TÀNG <span>SĂN BẮN</span>
+        </h1>
+        <p>Tổng hợp những pha hành động thực chiến đỉnh cao nhất.</p>
+
+        {heroVideo && (
+          <Link href={`/video/${heroVideo.slug.current}`} className={styles.ctaButton}>
+            Xem Video Mới Nhất
+          </Link>
+        )}
+      </div>
+    </section>
+  );
+}
+// 2. Submit CTA
+const SubmitCTA = () => (
+  <section className={styles.submitBar}>
+    <div className={styles.container}>
+      <FaCloudUploadAlt className={styles.icon} />
+      <h2>Bạn có video "chất"?</h2>
+      <p>Gửi ngay cho chúng tôi để xuất hiện trên trang chủ.</p>
+      <Link href="/submit" className={styles.submitBtn}>
+        Gửi Video Ngay
+      </Link>
+    </div>
+  </section>
+);
+
+// 3. Dynamic Section (Tái sử dụng cho cả Latest và Categories)
+const SectionGrid = ({ title, videos, linkUrl }: { title: string, videos: any[], linkUrl: string }) => {
   if (!videos || videos.length === 0) return null;
 
   return (
     <section className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <h3 className={styles.title}>{displayTitle}</h3>
-        <Link href={`/category/${category}`} className={styles.viewAll}>
+      <div className={styles.header}>
+        <h3>{title}</h3>
+        <Link href={linkUrl} className={styles.viewAll}>
           View All
         </Link>
       </div>
-
       <div className={styles.grid}>
         {videos.map((video: any) => (
           <VideoCard key={video._id} video={video} />
@@ -78,100 +126,92 @@ const DynamicVideoSection = async ({ category }: { category: string }) => {
   );
 };
 
-const LatestSection = ({ videos }: { videos: any[] }) => {
-  if (!videos.length) return null;
-  return (
-    <section className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <h3 className={styles.title}>Latest Footage</h3>
-        <Link href="/category/latest" className={styles.viewAll}>View All</Link>
-      </div>
-      <div className={styles.grid}>
-        {videos.map((video: any) => <VideoCard key={video._id} video={video} />)}
-      </div>
-    </section>
-  )
-}
+// 4. Wrapper cho Category Động
+const DynamicCategorySection = async ({ category }: { category: string }) => {
+  const videos = await getVideosByCategory(category);
+  // Format tên đẹp (viết hoa chữ đầu)
+  const displayTitle = category.charAt(0).toUpperCase() + category.slice(1);
+  return <SectionGrid title={displayTitle} videos={videos} linkUrl={`/category/${category}`} />;
+};
 
-export default async function Home() {
-  // Fetch dữ liệu song song
-  
-  
-  // 1. Lấy video mới nhất
-  const latestVideos = await getLatestVideos();
-  const heroVideo = latestVideos[0];
-  
-  // 2. Lấy danh sách các danh mục tự động
-  const categories = await getAllCategories();
-  console.log("categories",categories);
-  
+const WelcomeSection = () => {
   return (
-    <main className={styles.main}>
-      
-      {/* --- 1. HERO SECTION (ẢNH BÌA) --- */}
-     <section className={styles.hero}>
-        
-        {/* Ảnh Nền Hero */}
-        {heroVideo?.thumbnail ? (
-          <img 
-            src={urlForImage(heroVideo.thumbnail).width(1920).url()} 
-            alt="Hero Background" 
-            className={styles.heroBg}
+    <section className={styles.welcomeSection}>
+      <div className={styles.welcomeContainer}>
+
+        {/* CỘT TRÁI: ẢNH MINH HỌA */}
+        <div className={styles.imageWrapper}>
+          {/* Thay src bằng ảnh thật của bạn */}
+          <img
+            src="https://images.unsplash.com/photo-1516724562728-afc824a36e84?q=80&w=2071&auto=format&fit=crop"
+            alt="Filming crew"
           />
-        ) : (
-          // Fallback nếu không có video
-          <div className={`${styles.heroBg} bg-zinc-900`}></div>
-        )}
-        
-        {/* Lớp phủ gradient */}
-        <div className={styles.heroOverlay}></div>
+        </div>
 
-        {/* Nội dung Hero */}
-        <div className={styles.heroContent}>
-          
-          <span className={styles.featuredLabel}>Featured Premiere</span>
-          
-          <h1 className={styles.heroTitle}>
-            {heroVideo?.title || "Welcome to Mouse Farm Archive"}
-          </h1>
+        {/* CỘT PHẢI: NỘI DUNG */}
+        <div className={styles.textContent}>
 
-          <div className={styles.heroMeta}>
-            <span>{heroVideo ? new Date(heroVideo.recordedAt).toLocaleDateString('en-GB') : "2024"}</span>
-            <span className={styles.dot}></span>
-            <span>{heroVideo?.category || "Original"}</span>
-            <span className={styles.dot}></span>
-            <span>4K RAW</span>
+          {/* Khối 1: WELCOME */}
+          <div className="mb-10">
+            <h2>Welcome</h2>
+            <p>
+              Mouse Farm Archive is the definitive source for high-quality hunting and pest control footage.
+              Our library features thousands of clips ranging from thermal night vision hunts to helicopter operations.
+              We capture the raw intensity of agricultural protection.
+            </p>
           </div>
 
-          <div className={styles.heroActions}>
-            {heroVideo && (
-              <Link href={`/video/${heroVideo.slug.current}`} className={styles.watchBtn}>
-                <div className={styles.playIcon}>
-                  <Play size={16} fill="currentColor" />
-                </div>
-                Watch Now
-              </Link>
-            )}
-            <Link href="/category/latest" className={styles.browseBtn}>
-              Browse Library
+          {/* Khối 2: LICENSING */}
+          <div className={styles.licensingBlock}>
+            <h2>Licensing</h2>
+            <p>
+              We specialize in licensing and clearance of top-tier hunting content.
+              We have established relationships with brands, television studios, and news outlets to provide top-quality video for your projects.
+              <br /><br />
+              Browse for free or create an account for VIP Access to our library.
+            </p>
+
+            {/* Nút Liên Hệ */}
+            <Link href="/contact" className={styles.ctaButton}>
+              Contact Us
             </Link>
           </div>
 
         </div>
-      </section>
-
-      <div className={styles.container}>
-        
-        {/* LATEST FOOTAGE (Luôn hiện đầu tiên) */}
-        <LatestSection videos={latestVideos} />
-
-        {/* CÁC DANH MỤC TỰ ĐỘNG (Dynamic Categories) */}
-        {categories.map((category) => (
-          // Gọi component async để nó tự fetch video của category đó
-          <DynamicVideoSection key={category} category={category} />
-        ))}
-
       </div>
+    </section>
+  );
+};
+
+export default async function Home() {
+  const latestVideos = await getLatestVideos();
+  const categories = await getAllCategories();
+  const heroVideo = latestVideos[0];
+
+  return (
+    <main className={styles.main}>
+
+      {/* Hero */}
+      <HeroSection heroVideo={heroVideo} />
+
+      <WelcomeSection />
+
+      {/* Submit Bar */}
+      {/* <SubmitCTA /> */}
+      <VideoUploadForm />
+      {/*   <section className="py-20 px-6 bg-zinc-950 border-y border-zinc-900">
+      </section> */}
+      {/* <div className={styles.container}> */}
+
+      {/* Latest Videos */}
+      {/* <SectionGrid title="Video Mới Nhất" videos={latestVideos} linkUrl="/category/latest" /> */}
+
+      {/* Dynamic Categories */}
+      {/* {categories.map((cat) => (
+          <DynamicCategorySection key={cat} category={cat} />
+        ))} */}
+
+      {/* </div> */}
     </main>
   );
 }

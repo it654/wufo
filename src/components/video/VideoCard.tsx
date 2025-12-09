@@ -37,7 +37,7 @@ export default function VideoCard({ video }: VideoCardProps) {
               alt={video.title}
               loading="lazy"
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-90 group-hover:opacity-100"
-              style={{maxHeight:214.5}}
+              style={{maxHeight:170}}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-zinc-600 bg-zinc-800 text-sm font-black uppercase tracking-widest">

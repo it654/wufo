@@ -21,13 +21,14 @@ $border-color: #27272a; // zinc-800
   color: $text-white;
   font-family: sans-serif;
   padding-bottom: 5rem;
+
 }
 
 .container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 1.5rem;
-
+  margin-top: 8rem;
   @media (min-width: 1024px) {
     padding: 0 2rem;
   }
@@ -214,7 +215,6 @@ $border-color: #27272a; // zinc-800
 
 // ... (các style cũ giữ nguyên)
 
-
 /* --- WELCOME & LICENSING SECTION --- */
 .welcomeSection {
   padding: 5rem 1.5rem;
@@ -282,7 +282,7 @@ $border-color: #27272a; // zinc-800
 
     .ctaButton {
       display: inline-block;
-      background-color: #3bbbf5; // Màu đỏ đậm (giống nút Contact Us trong ảnh)
+      background-color: #dc2626; // Màu đỏ đậm (giống nút Contact Us trong ảnh)
       color: white;
       font-weight: 700;
       text-transform: uppercase;

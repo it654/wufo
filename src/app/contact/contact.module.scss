@@ -1,0 +1,164 @@
+/* src/app/contact/contact.module.scss */
+
+$bg-color: #000000;
+$text-white: #ffffff;
+$text-muted: #71717a; // zinc-500
+$border-color: #27272a; // zinc-800
+$accent-color: #3bbbf5; // orange-600
+$input-bg: #09090b; // zinc-950
+
+.container {
+  min-height: 100vh;
+  background-color: $bg-color;
+  color: $text-white;
+  padding: 6rem 1.5rem;
+  font-family: sans-serif;
+  margin-top: 6rem;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 1fr 1.5fr; /* Cột trái nhỏ hơn cột phải */
+    gap: 6rem;
+  }
+}
+
+/* --- LEFT COLUMN: INFO --- */
+.infoColumn {
+  .heading {
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.9;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.05em;
+
+    span {
+      color: $text-muted;
+    }
+  }
+
+  .description {
+    color: $text-muted;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+  }
+
+  .statsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid $border-color;
+
+    .statItem {
+      h4 {
+        font-size: 2rem;
+        font-weight: 800;
+        color: $text-white;
+      }
+      p {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: $text-muted;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .contactDetails {
+    h5 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: $text-muted;
+      margin-bottom: 1rem;
+    }
+
+    a {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $text-white;
+      text-decoration: none;
+      margin-bottom: 0.5rem;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $accent-color;
+      }
+    }
+  }
+}
+
+/* --- RIGHT COLUMN: FORM --- */
+.formColumn {
+  background-color: #09090b; // Nền hơi xám nhẹ để tách biệt
+  padding: 2.5rem;
+  border-radius: 24px;
+  border: 1px solid $border-color;
+
+  .formGroup {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: $text-muted;
+      margin-bottom: 0.75rem;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      background-color: #000;
+      border: 1px solid $border-color;
+      color: $text-white;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+
+      &:focus {
+        border-color: $accent-color;
+      }
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+  }
+
+  .submitBtn {
+    width: 100%;
+    background-color: $text-white;
+    color: $bg-color;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 1.25rem;
+    border-radius: 99px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: $accent-color;
+      color: $text-white;
+    }
+  }
+}

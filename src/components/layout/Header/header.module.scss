@@ -1,0 +1,107 @@
+/* src/components/layout/header.module.scss */
+
+$primary-color: #3bbbf5; // Màu cam đặc trưng
+$text-white: #ffffff;
+$bg-dark: rgba(0, 0, 0, 0.9);
+
+.header {
+  position: fixed; /* Dính chặt trên cùng */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  transition: all 0.3s ease-in-out;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  /* Trạng thái mặc định (khi ở trên cùng) */
+  background-color: transparent; 
+  padding: 1.5rem 0;
+
+  /* Trạng thái khi cuộn xuống (sẽ add class này bằng JS) */
+  &.scrolled {
+    background-color: $bg-dark;
+    backdrop-filter: blur(10px); /* Hiệu ứng kính mờ */
+    padding: 1rem 0; /* Thu nhỏ lại chút cho gọn */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  text-decoration: none;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: $text-white;
+    letter-spacing: -1px;
+    margin: 0;
+
+    span {
+      color: $primary-color; /* Chữ FARM màu cam */
+    }
+  }
+}
+
+.nav {
+  display: flex;
+  gap: 2rem;
+
+  a {
+    color: #a1a1aa; /* Màu xám nhạt */
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+    position: relative;
+
+    &:hover {
+      color: $text-white;
+    }
+
+    /* Hiệu ứng gạch chân khi hover */
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background-color: $primary-color;
+      transition: width 0.3s;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
+
+  /* Nút Submit nổi bật */
+  .submitBtn {
+    color: $primary-color;
+    border: 1px solid $primary-color;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    
+    &:hover {
+      background-color: $primary-color;
+      color: $text-white;
+    }
+    
+    &::after { display: none; } /* Bỏ gạch chân cho nút này */
+  }
+}

@@ -1,0 +1,247 @@
+/* src/components/home/video-upload.module.scss */
+
+// Biến màu (SwagMedia)
+$bg-color: #000000;
+$text-white: #ffffff;
+$text-muted: #a1a1aa; // zinc-400
+$border-color: #27272a; // zinc-800
+$accent-color: #3bbbf5; // orange-600
+$card-bg: #18181b; // zinc-900
+
+.container {
+  background-color: $card-bg;
+//   border: 1px solid $border-color;
+  border-radius: 12px;
+  padding: 2rem;
+  
+  max-width: 42rem; // ~672px
+  margin: 0 auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* --- HEADER --- */
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.875rem; // 3xl
+    font-weight: 900; // black
+    color: $text-white;
+    text-transform: uppercase;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.5rem;
+
+    span {
+      color: $accent-color;
+    }
+  }
+
+  p {
+    font-size: 0.875rem; // sm
+    color: $text-muted;
+  }
+}
+
+/* --- FORM --- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* --- UPLOAD AREA --- */
+.uploadArea {
+  position: relative;
+  border: 2px dashed #3f3f46; // zinc-700
+  border-radius: 8px;
+  padding: 2.5rem;
+  text-align: center;
+  background-color: rgba(9, 9, 11, 0.5); // zinc-950/50
+  transition: all 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $accent-color;
+
+    .icon {
+      color: $accent-color;
+    }
+    
+    .ctaText {
+      color: $accent-color;
+    }
+  }
+
+  /* Input file ẩn */
+  input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+    
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  /* Trạng thái mặc định */
+  .defaultState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .icon {
+      font-size: 3.75rem; // 6xl
+      color: #52525b; // zinc-600
+      margin-bottom: 1rem;
+      transition: color 0.2s;
+    }
+
+    .ctaText {
+      font-size: 1.125rem; // lg
+      font-weight: 700;
+      color: $text-white;
+      margin-bottom: 0.25rem;
+      transition: color 0.2s;
+    }
+
+    .subText {
+      font-size: 0.75rem; // xs
+      color: #52525b; // zinc-600
+    }
+  }
+
+  /* Trạng thái Loading */
+  .loadingState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: $accent-color;
+
+    .spinner {
+      font-size: 2.25rem; // 4xl
+      margin-bottom: 0.75rem;
+      animation: spin 1s linear infinite;
+    }
+
+    span {
+      font-weight: 700;
+    }
+  }
+
+  /* Trạng thái Success */
+  .successState {
+    color: #22c55e; // green-500
+
+    .checkIcon {
+      font-size: 3rem; // 5xl
+      margin-bottom: 0.75rem;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .successText {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .fileName {
+      font-size: 0.75rem; // xs
+      color: $text-muted;
+      margin-top: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 20rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+/* --- INPUT FIELDS --- */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.field {
+  label {
+    display: block;
+    font-size: 0.75rem; // xs
+    font-weight: 700;
+    color: $text-muted;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  input, textarea {
+    width: 100%;
+    background-color: #000;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    padding: 0.75rem;
+    color: $text-white;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: $accent-color;
+    }
+  }
+
+  textarea {
+    resize: none;
+    min-height: 80px;
+  }
+}
+
+/* --- SUBMIT BUTTON --- */
+.submitBtn {
+  width: 100%;
+  background-color: $accent-color;
+  color: #000;
+  font-weight: 900; // black
+  text-transform: uppercase;
+  letter-spacing: 0.1em; // widest
+  padding: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #3bbbf5; // Màu gốc
+    opacity: 0.9;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
