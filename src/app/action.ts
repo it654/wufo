@@ -15,7 +15,6 @@ export async function sendContactEmail(formData: FormData) {
   if (!name || !email || !message) {
     return { success: false, error: 'Thiếu thông tin bắt buộc' };
   }
-
   try {
     // 2. Gửi Email qua Resend
     const data = await resend.emails.send({

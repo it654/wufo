@@ -60,7 +60,7 @@ const HeroSection = ({ heroVideo }: { heroVideo: any }) => {
               rel: 0, // Không gợi ý video kênh khác
               disablekb: 1, // Tắt phím tắt
               iv_load_policy: 3 // Tắt chú thích
-            }
+            } as any
           }}
           style={{
             position: 'absolute',
