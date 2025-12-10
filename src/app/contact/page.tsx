@@ -9,11 +9,11 @@ export default function ContactPage() {
   const [isLoading, setIsLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   // Xử lý gửi form giả lập
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
 
     // Gọi Server Action
     const result = await sendContactEmail(formData);
