@@ -54,14 +54,12 @@ const HeroSection = ({ heroVideo }: { heroVideo: any }) => {
           controls={false}   // Ẩn điều khiển
           config={{
             youtube: {
-              playerVars: {
-                showinfo: 0,
-                modestbranding: 1,
-                controls: 0,
-                rel: 0, // Không gợi ý video kênh khác
-                disablekb: 1, // Tắt phím tắt
-                iv_load_policy: 3 // Tắt chú thích
-              }
+              showinfo: 0,
+              modestbranding: 1,
+              controls: 0,
+              rel: 0, // Không gợi ý video kênh khác
+              disablekb: 1, // Tắt phím tắt
+              iv_load_policy: 3 // Tắt chú thích
             }
           }}
           style={{
