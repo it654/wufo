@@ -1,11 +1,11 @@
 /* src/app/video/[slug]/video-detail.module.scss */
 
 // Biến màu (giống YouTube)
-$bg-color: #ffffff;
-$text-primary: #0f0f0f;
-$text-secondary: #606060;
-$hover-bg: #e5e5e5;
-$btn-bg: #f2f2f2;
+$bg-color: #000;
+$text-primary: #fff;
+$text-secondary: #d4d4d4;
+$hover-bg: #2c2c2c;
+$btn-bg: #252323;
 $border-color: #e5e5e5;
 $primary-color: #3bbbf5; // Màu cam của web bạn
 $emerald: #059669;
@@ -14,6 +14,7 @@ $emerald: #059669;
   min-height: 100vh;
   background-color: $bg-color;
   font-family: sans-serif;
+  margin-top: 8rem;
 }
 
 .mainLayout {

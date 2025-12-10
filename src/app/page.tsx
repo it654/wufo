@@ -8,6 +8,7 @@ import ContactPage from "./contact/page";
 import SubmitVideo from "../components/ui/SubmitVideo/SubmitVideo";
 import VideoUploadForm from "../components/ui/VideoUploadForm/VideoUploadForm";
 import dynamic from 'next/dynamic';
+import HeroSearch from "../components/ui/Home/HeroSearch";
 const ReactPlayer = dynamic(() => import('react-player'), { ssr: true });
 
 
@@ -76,15 +77,18 @@ const HeroSection = ({ heroVideo }: { heroVideo: any }) => {
 
       <div className={styles.heroContent}>
         <h1>
-          KHO TÀNG <span>SĂN BẮN</span>
+          MOUSE FARM <span>ARCHIVE</span>
         </h1>
-        <p>Tổng hợp những pha hành động thực chiến đỉnh cao nhất.</p>
+        <p>
+          The definitive collection of thermal hunting, pest control, and high-precision field operations.
+        </p>
+        <HeroSearch />
 
-        {heroVideo && (
+        {/* {heroVideo && (
           <Link href={`/video/${heroVideo.slug.current}`} className={styles.ctaButton}>
             Xem Video Mới Nhất
           </Link>
-        )}
+        )} */}
       </div>
     </section>
   );

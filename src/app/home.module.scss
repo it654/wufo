@@ -69,6 +69,53 @@ $border-color: #27272a; // zinc-800
     text-align: center;
     padding: 0 1rem;
     z-index: 10;
+    .searchWrapper {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 20; // Nổi lên trên
+
+    input {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.1); // Nền trong suốt
+      backdrop-filter: blur(10px); // Kính mờ
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 99px;
+      padding: 1.25rem 2rem;
+      // padding-right: 4rem; // Chừa chỗ cho icon search
+      color: $text-white;
+      font-size: 1.125rem;
+      font-weight: 500;
+      outline: none;
+      transition: all 0.3s ease;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      &:focus {
+        background-color: rgba(0, 0, 0, 0.6); // Đen hơn khi focus
+        border-color: $accent-color; // Viền cam
+        box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.2); // Glow cam
+      }
+    }
+
+    .searchIcon {
+      position: absolute;
+      right: -1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $text-gray;
+      pointer-events: none; // Để click xuyên qua
+      transition: color 0.3s;
+    }
+
+    /* Hiệu ứng khi focus input thì icon sáng lên */
+    &:focus-within .searchIcon {
+      color: $accent-color;
+    }
+  }
   }
 
   h1 {

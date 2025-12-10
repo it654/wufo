@@ -37,7 +37,9 @@ export default function ContactPage() {
             Let's <br />
             <span>Work Together</span>
           </h1>
-
+          
+          <div className=""></div>
+          <div className=""></div>
           <p className={styles.description}>
             Interested in partnering with Mouse Farm? We are always looking for strategic partnership opportunities for Advertising, Sponsorship or Content Licensing.
           </p>
@@ -106,10 +108,8 @@ export default function ContactPage() {
             <button type="submit" className={styles.submitBtn} disabled={isLoading}>
               {isLoading ? 'Sending...' : 'Send Message'}
             </button>
-
           </form>
         </div>
-
       </div>
     </div>
   );

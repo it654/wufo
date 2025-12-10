@@ -12,6 +12,7 @@ $border-color: #27272a; // zinc-800
   color: $text-white;
   font-family: sans-serif;
   padding-bottom: 5rem;
+  margin-top: 6rem;
 }
 
 .contentWrapper {
@@ -46,7 +47,7 @@ $border-color: #27272a; // zinc-800
   }
 
   .title {
-    font-size: 2.5rem;
+    font-size: 2.5rem!important;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: -0.02em;

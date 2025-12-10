@@ -1,0 +1,121 @@
+/* src/app/submit/submit.module.scss */
+
+// Biến màu (Đồng bộ với Home)
+$bg-color: #000000;
+$text-white: #ffffff;
+$text-muted: #a1a1aa; // zinc-400
+$text-dark: #52525b; // zinc-600
+$border-color: #27272a; // zinc-800
+$accent-color:#3bbbf5; // orange-600
+$card-bg: #09090b; // zinc-950
+
+.main {
+  min-height: 100vh;
+  background-color: $bg-color;
+  color: $text-white;
+  font-family: sans-serif;
+  margin-top: 9rem;
+}
+
+/* --- HEADER PAGE --- */
+.header {
+  border-bottom: 1px solid $border-color;
+  background-color: $card-bg;
+  padding: 4rem 1.5rem;
+  text-align: center;
+
+  h1 {
+    font-size: 2.25rem; // 4xl
+    font-weight: 900; // black
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+    margin-bottom: 1rem;
+    color: $text-white;
+    line-height: 1;
+    span {
+      color: $accent-color;
+    }
+
+    @media (min-width: 768px) {
+      font-size: 3rem; // 5xl
+    }
+  }
+
+  p {
+    font-size: 1.125rem; // lg
+    color: $text-muted;
+    max-width: 42rem;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+}
+
+/* --- CONTENT WRAPPER --- */
+.container {
+  max-width: 56rem; // 4xl
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+/* --- INFO GRID (Các ô hướng dẫn) --- */
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  font-size: 0.875rem; // sm
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .card {
+    padding: 1.5rem;
+    background-color: $card-bg;
+    border-radius: 0.5rem;
+    border: 1px solid $border-color;
+    transition: border-color 0.2s;
+
+    &:hover {
+      border-color: $accent-color;
+    }
+
+    .icon {
+      font-size: 1.875rem; // 30px
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    h3 {
+      font-weight: 700;
+      color: $text-white;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    p {
+      color: $text-dark;
+    }
+  }
+}
+
+/* --- FOOTER TEXT --- */
+.termsText {
+  text-align: center;
+  font-size: 0.75rem; // xs
+  color: $text-dark;
+  margin-top: 2rem;
+  max-width: 32rem;
+  margin-left: auto;
+  margin-right: auto;
+
+  a {
+    text-decoration: underline;
+    color: $text-dark;
+    
+    &:hover {
+      color: $text-muted;
+    }
+  }
+}

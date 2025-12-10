@@ -1,55 +1,48 @@
 import { useState } from 'react';
+
 import toast from 'react-hot-toast';
+import { client } from '../sanity/lib/client';
 
 export const useUpload = () => {
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0); // Thêm progress bar cho xịn
 
-  const uploadFile = async (file: File): Promise<string | null> => {
-    // 1. Kiểm tra file
+  const uploadFileToSanity = async (file: File): Promise<string | null> => {
     if (!file) return null;
-    if (!file.type.startsWith('image/')) {
-      toast.error('Chỉ được upload file ảnh!');
+    
+    // Validate
+    if (!file.type.startsWith('video/')) {
+      toast.error('Chỉ được upload video!');
       return null;
     }
-    if (file.size > 5 * 1024 * 1024) { // 5MB
-      toast.error('File quá lớn (Tối đa 5MB)');
+    // Sanity giới hạn file size tùy gói (Free ~100MB, Plus ~2GB). Cẩn thận file quá lớn.
+    if (file.size > 100 * 1024 * 1024) { 
+      toast.error('File quá lớn (Max 100MB cho bản Demo)');
       return null;
     }
 
     try {
       setUploading(true);
-      
-      // 2. Chuẩn bị dữ liệu gửi lên Cloudinary
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'lms_preset'); // Tên preset bạn vừa tạo
+      setProgress(0);
 
-      const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-      const url = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
-
-      // 3. Gọi API upload
-      const response = await fetch(url, {
-        method: 'POST',
-        body: formData,
+      // Upload lên Sanity
+      // Sanity client hỗ trợ Observable để theo dõi tiến độ, nhưng ở đây dùng promise cho đơn giản
+      const assetDocument = await client.assets.upload('file', file, {
+        filename: file.name,
+        contentType: file.type
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error?.message || 'Upload thất bại');
-      }
       
-      // 4. Trả về link ảnh (secure_url là link https)
-      return data.secure_url;
+      // Trả về ID của file (VD: file-123456...-mp4) để sau này liên kết
+      return assetDocument._id; 
 
     } catch (error: any) {
       console.error('Upload Error:', error);
-      toast.error(`Lỗi upload: ${error.message}`);
+      toast.error('Lỗi upload lên Sanity');
       return null;
     } finally {
       setUploading(false);
     }
   };
 
-  return { uploadFile, uploading };
+  return { uploadFileToSanity, uploading, progress };
 };

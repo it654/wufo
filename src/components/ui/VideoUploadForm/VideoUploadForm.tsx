@@ -13,37 +13,53 @@ export default function VideoUploadForm() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    videoUrl: '',
+    videoAssetId: '',
     authorName: '',
     authorEmail: ''
   });
-  
-  const { uploadFile, uploading } = useUpload();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { uploadFileToSanity, uploading } = useUpload();
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith('video/')) {
-        toast.error('Vui lòng chọn file video!');
-        return;
-    }
+    // Gọi upload Sanity
+    const assetId = await uploadFileToSanity(file);
     
-    // Gọi hàm upload
-    const url = await uploadFile(file);
-    if (url) {
-      setFormData({ ...formData, videoUrl: url });
-      toast.success('Video đã được tải lên! Hãy điền nốt thông tin.');
+    if (assetId) {
+      setFormData({ ...formData, videoAssetId: assetId });
+      toast.success('Video đã lên Sanity!');
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Logic gửi form lên API (lưu vào Sanity hoặc Database)
-    // await submitToSanity(formData)...
+    setIsSubmitting(true);
     
-    toast.success('Cảm ơn bạn đã đóng góp video!');
-    setFormData({ title: '', description: '', videoUrl: '', authorName: '', authorEmail: '' });
+    // Toast Loading
+    const toastId = toast.loading('Đang gửi thông tin...');
+
+    try {
+      // Gọi API Next.js (Server Action)
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) throw new Error('Gửi thất bại');
+
+      toast.success('Đã gửi thành công! Admin sẽ duyệt video của bạn.', { id: toastId });
+      
+      // Reset form
+      setFormData({ title: '', description: '', videoAssetId: '', authorName: '', authorEmail: '' });
+
+    } catch (error) {
+      toast.error('Có lỗi xảy ra. Vui lòng thử lại.', { id: toastId });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -54,7 +70,7 @@ export default function VideoUploadForm() {
         <h2>
           Submit Your <span>Video</span>
         </h2>
-        <p>Chia sẻ những khoảnh khắc săn bắn ấn tượng nhất của bạn với cộng đồng.</p>
+        <p>Share your best hunting moments with our global community.</p>
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -66,24 +82,24 @@ export default function VideoUploadForm() {
              type="file" 
              accept="video/*" 
              onChange={handleFileChange}
-             disabled={uploading || !!formData.videoUrl}
+             disabled={uploading || !!formData.videoAssetId}
            />
            
            {uploading ? (
              <div className={styles.loadingState}>
                <FaSpinner className={styles.spinner} />
-               <span>Đang tải video lên...</span>
+               <span>Uploading video...</span>
              </div>
-           ) : formData.videoUrl ? (
+           ) : formData.videoAssetId ? (
              <div className={styles.successState}>
                 <FaCheckCircle className={styles.checkIcon} />
-                <p className={styles.successText}>Video đã sẵn sàng!</p>
-                <p className={styles.fileName}>{formData.videoUrl}</p>
+                <p className={styles.successText}>Video Ready!</p>
+                <p className={styles.fileName}>{formData.videoAssetId}</p>
              </div>
            ) : (
              <div className={styles.defaultState}>
                <FaCloudUploadAlt className={styles.icon} />
-               <h3 className={styles.ctaText}>Kéo thả hoặc bấm để chọn video</h3>
+               <h3 className={styles.ctaText}>Drag & Drop or Click to Upload</h3>
                <p className={styles.subText}>MP4, MOV (Max 500MB)</p>
              </div>
            )}
@@ -92,12 +108,12 @@ export default function VideoUploadForm() {
         {/* --- CÁC TRƯỜNG THÔNG TIN --- */}
         <div className={styles.grid}>
           <div className={styles.field}>
-            <label>Tiêu đề Video</label>
+            <label>Video Title</label>
             <input 
               type="text" required
               value={formData.title}
               onChange={(e) => setFormData({...formData, title: e.target.value})}
-              placeholder="VD: Cú bắn để đời..."
+              placeholder="E.g. Epic Thermal Shot..."
             />
           </div>
           <div className={styles.field}>
@@ -106,28 +122,28 @@ export default function VideoUploadForm() {
               type="text" required
               value={formData.authorName}
               onChange={(e) => setFormData({...formData, authorName: e.target.value})}
-              placeholder="VD: Nguyễn Văn A"
+              placeholder="E.g. John Doe"
             />
           </div>
         </div>
 
         <div className={styles.field}>
-            <label>Mô tả ngắn</label>
+            <label>Description</label>
             <textarea 
               rows={3}
               value={formData.description}
               onChange={(e) => setFormData({...formData, description: e.target.value})}
-              placeholder="Kể thêm về bối cảnh video này..."
+              placeholder="Tell us about the context..."
             />
         </div>
 
         {/* --- NÚT SUBMIT --- */}
         <button 
           type="submit"
-          disabled={!formData.videoUrl || uploading}
+          disabled={!formData.videoAssetId || isSubmitting}
           className={styles.submitBtn}
         >
-          <FaPaperPlane /> Gửi Video Ngay
+          <FaPaperPlane /> SEND FOOTAGE
         </button>
 
       </form>

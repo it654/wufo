@@ -5,41 +5,51 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendContactEmail(formData: FormData) {
-  // 1. Lấy dữ liệu từ Form
   const name = formData.get('name') as string;
   const email = formData.get('email') as string;
   const interest = formData.get('interest') as string;
   const message = formData.get('message') as string;
 
-  // Validate sơ bộ
   if (!name || !email || !message) {
-    return { success: false, error: 'Thiếu thông tin bắt buộc' };
+    return { success: false, error: 'Thiếu thông tin' };
   }
+
   try {
-    // 2. Gửi Email qua Resend
     const data = await resend.emails.send({
-      from: 'Contact Form <onboarding@resend.dev>', // Email mặc định của Resend (Dùng được ngay)
-      to: 'tuandat2514.work@gmail.com', // <--- THAY EMAIL CỦA BẠN VÀO ĐÂY ĐỂ NHẬN THƯ
-      replyTo: email, // Để bấm Reply là trả lời người gửi luôn
-      subject: `[MouseFarm] New Contact: ${interest} from ${name}`,
-      html: `
-        <h2>New Partnership Inquiry</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Interest:</strong> ${interest}</p>
-        <hr />
-        <p><strong>Message:</strong></p>
-        <p>${message}</p>
-      `,
+      // QUAN TRỌNG: Phải dùng email này nếu chưa add domain
+      /* from: 'Contact Form <onboarding@resend.dev>',
+
+      // QUAN TRỌNG: Chỉ gửi được đến email của BẠN (email đăng ký Resend)
+      // Nếu gửi đến email khác sẽ bị chặn ở gói Free
+      to: ['email_cua_ban@gmail.com'],
+
+      replyTo: email, // Để bạn bấm Reply là trả lời người gửi
+      subject: `[MouseFarm] ${interest} - ${name}`,
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`, // Bản text dự phòng */
+
+      from: 'onboarding@resend.dev',
+      to: 'mousefarm@career.sanogroup.tv',
+      subject: `[MouseFarm] ${interest} - ${name}`,
+      html: `<div className="">
+           Tên - ${name}
+          </div>`+
+        `<div className="">
+           Email - ${email}
+          </div>` +
+        `<div className="">
+           
+            Message - <strong>${message}!</strong>
+          </div>`
     });
 
     if (data.error) {
-        return { success: false, error: data.error.message };
+      console.error("Resend Error:", data.error);
+      return { success: false, error: data.error.message };
     }
 
     return { success: true };
-
   } catch (error) {
-    return { success: false, error: 'Lỗi server khi gửi mail' };
+    console.error("Server Action Error:", error);
+    return { success: false, error: 'Lỗi server' };
   }
 }

@@ -1,22 +1,28 @@
+'use client'
 import Link from "next/link";
 import { FaYoutube, FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 
 // Import SCSS Module
 import styles from './footer.module.scss';
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const param = usePathname()
+  if(param.startsWith("/studio")){
+    return null
+  }
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
-        
+
         {/* --- TOP SECTION --- */}
         <div className={styles.topSection}>
-          
+
           {/* Logo */}
           <Link href="/" className={styles.logo}>
             <img src="logo.png" alt="logo" />
             <h1>
-              MOUSE<br/><span>FARM</span>
+              MOUSE<br /><span>FARM</span>
             </h1>
           </Link>
 
@@ -24,11 +30,11 @@ export default function Footer() {
           <div className={styles.navColumns}>
             <div className={styles.column}>
               <Link href="/video">Videos</Link>
-              <Link href="#">Submit</Link>
+              <Link href="/submit">Submit</Link>
             </div>
             <div className={styles.column}>
               <Link href="/about">About Us</Link>
-              <Link href="#">Contact</Link>
+              <Link href="/contact">Contact</Link>
             </div>
             <div className={styles.column}>
               <Link href="#">Terms</Link>

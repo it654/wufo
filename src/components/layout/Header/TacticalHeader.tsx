@@ -2,9 +2,10 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from './header.module.scss';
+import {usePathname} from "next/navigation";
 export default function Header() {
+  const param = usePathname()
   const [isScrolled, setIsScrolled] = useState(false);
-
   useEffect(() => {
     const handleScroll = () => {
       // Nếu cuộn quá 50px thì bật chế độ nền tối
@@ -18,6 +19,11 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  if(param.startsWith("/studio")){
+    return null
+  }
+  
+
   return (
     <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
       <div className={styles.container}>

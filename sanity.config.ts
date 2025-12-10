@@ -12,17 +12,30 @@ import {structureTool} from 'sanity/structure'
 import {apiVersion, dataset, projectId} from './src/sanity/env'
 import {schema} from './src/sanity/schemaTypes'
 import {structure} from './src/sanity/structure'
+import { ApproveAction } from './src/sanity/action'
 
 export default defineConfig({
   basePath: '/studio',
   projectId,
   dataset,
   // Add and edit the content schema in the './sanity/schemaTypes' folder
-  schema,
+  schema: {
+    types: schema.types,
+  },
   plugins: [
-    structureTool({structure}),
+    /* structureTool({structure}),
     // Vision is for querying with GROQ from inside the Studio
     // https://www.sanity.io/docs/the-vision-plugin
-    visionTool({defaultApiVersion: apiVersion}),
+    visionTool({defaultApiVersion: apiVersion}), */
+    structureTool(), visionTool()
   ],
+  document: {
+    actions: (prev, context) => {
+      // Chỉ hiện nút Duyệt cho loại 'submission'
+      if (context.schemaType === 'submission') {
+        return [ApproveAction, ...prev];
+      }
+      return prev;
+    },
+  },
 })

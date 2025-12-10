@@ -5,6 +5,7 @@ import TacticalHeader from "../components/layout/Header/TacticalHeader";
 import Footer from "../components/layout/Footer/Footer";
 import Header from "../components/layout/Header/TacticalHeader";
 import {Oswald } from 'next/font/google';
+import { Toaster } from "react-hot-toast";
 // 1. Font chữ thường (Đọc nội dung)
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -33,7 +34,19 @@ export default function RootLayout({
       <body className="bg-black text-white flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow">{children}</main>
+        <Toaster 
+               position="bottom-right" 
+               reverseOrder={false} 
+               toastOptions={{
+                 duration: 5000,
+                 style: {
+                   background: '#333',
+                   color: '#fff',
+                 },
+               }}
+             />
         <Footer />
+
       </body>
     </html>
   );

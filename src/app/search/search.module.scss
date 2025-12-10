@@ -1,0 +1,156 @@
+/* src/app/search/search.module.scss */
+
+// Biến màu (SwagMedia)
+$bg-color: #000000;
+$text-white: #ffffff;
+$text-muted: #a1a1aa; // zinc-400
+$border-color: #27272a; // zinc-800
+$accent-color: #3bbbf5; // orange-600
+
+.main {
+  min-height: 100vh;
+  background-color: $bg-color;
+  color: $text-white;
+  font-family: sans-serif;
+  padding-bottom: 5rem;
+  
+}
+
+.container {
+  max-width: 1400px;
+  margin: 6rem auto;
+  padding: 3rem 1.5rem;
+
+  @media (min-width: 1024px) {
+    padding: 4rem 2rem;
+  }
+}
+
+/* --- HEADER KẾT QUẢ --- */
+.resultsHeader {
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid $border-color;
+
+  h1 {
+    font-size: 2rem !important;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    color: $text-white;
+    line-height: 1.2;
+
+    span {
+      color: $accent-color;
+      font-style: italic;
+    }
+
+    @media (min-width: 768px) {
+      font-size: 3rem;
+    }
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: $text-muted;
+    margin-top: 0.5rem;
+    font-weight: 500;
+  }
+}
+
+/* --- GRID LAYOUT --- */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 1536px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* --- EMPTY STATE --- */
+.noResults {
+  text-align: center;
+  padding: 6rem 0;
+  background-color: #18181b; // zinc-900
+  border-radius: 12px;
+  border: 1px dashed $border-color;
+
+  .icon {
+    font-size: 4rem;
+    color: $text-muted;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $text-white;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: $text-muted;
+  }
+}
+
+/* src/components/ui/search-bar.module.scss */
+
+$text-white: #ffffff;
+$text-muted: #a1a1aa; // zinc-400
+$bg-dark: #18181b; // zinc-900
+$border-color: #3f3f46; // zinc-700
+
+
+.searchWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 42rem; // max-w-2xl
+  margin: 2rem auto; // mx-auto my-8
+
+  input {
+    width: 100%;
+    background-color: $bg-dark;
+    border: 1px solid $border-color;
+    border-radius: 9999px; // rounded-full
+    padding: 0.75rem 3rem 0.75rem 1.25rem; // pl-5 pr-12 py-3
+    color: $text-white;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+
+    &::placeholder {
+      color: $text-muted;
+    }
+
+    &:focus {
+      border-color: $accent-color;
+      box-shadow: 0 0 0 1px $accent-color; // ring-1
+    }
+  }
+
+  .searchBtn {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.5rem;
+    color: $text-muted;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $text-white;
+    }
+  }
+}
