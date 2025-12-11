@@ -21,19 +21,18 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'videoFile',
-      title: 'File Video Gốc (MP4/MOV)',
-      type: 'file',
-      options: {
-        accept: 'video/*'
-      },
-      description: 'Upload file gốc tại đây để làm bằng chứng sở hữu.'
+      name: 'bunnyVideoId',
+      title: 'Bunny Video ID',
+      type: 'string',
+      description: 'ID của video trên Bunny Stream (VD: xxxxx-xxxxx...)',
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'thumbnail',
       title: 'Ảnh Bìa (Thumbnail)',
       type: 'image',
       options: { hotspot: true },
+      
     }),
     defineField({
       name: 'category',

@@ -245,3 +245,23 @@ $card-bg: #18181b; // zinc-900
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+$red-500: #ef4444; 
+$red-400: #f87171;
+.anotherFile{
+  margin-top: 0.75rem; /* mt-3 (3 * 0.25rem = 0.75rem) */
+  font-size: 0.75rem; /* text-xs (12px) */
+  line-height: 1rem; /* text-xs line-height */
+  color: $red-500; /* text-red-500 */
+  text-decoration: underline; /* underline */
+  z-index: 20; /* z-20 */
+  position: relative; /* relative */
+  
+  cursor: pointer; /* Thêm cái này cho giống nút bấm */
+  background: none; /* Reset style mặc định của button */
+  border: none;
+  padding: 0;
+
+  &:hover {
+    color: $red-400; /* hover:text-red-400 */
+  }
+}

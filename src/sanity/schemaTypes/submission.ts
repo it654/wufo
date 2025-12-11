@@ -7,11 +7,11 @@ export default defineType({
   fields: [
     defineField({ name: 'title', title: 'Tiêu đề Video', type: 'string' }),
     defineField({ name: 'description', title: 'Mô tả', type: 'text' }),
-    defineField({ 
-      name: 'videoFile', 
-      title: 'File Video', 
-      type: 'file',
-      options: { accept: 'video/*' }
+    defineField({
+      name: 'bunnyVideoId',
+      title: 'Bunny Video ID',
+      type: 'string',
+      description: 'ID video trên Bunny Stream'
     }),
     defineField({ name: 'authorName', title: 'Tên người gửi', type: 'string' }),
     defineField({ name: 'authorEmail', title: 'Email', type: 'string' }),

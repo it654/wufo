@@ -13,59 +13,68 @@ export default function VideoUploadForm() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    videoAssetId: '',
+    bunnyVideoId: '',
     authorName: '',
     authorEmail: '',
-    status:''
+    status: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { uploadFileToSanity, uploading } = useUpload();
+  const { uploadVideoToBunny, uploading, progress } = useUpload();;
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Gọi upload Sanity
-    const assetId = await uploadFileToSanity(file);
-    
-    if (assetId) {
-      setFormData({ ...formData, videoAssetId: assetId });
-      toast.success('Video đã lên Sanity!');
+    // Validate nhanh
+    if (!file.type.startsWith('video/')) {
+      toast.error('Vui lòng chọn file video!');
+      return;
+    }
+
+    // Gọi hàm upload (Truyền thêm title tạm để Bunny tạo placeholder)
+    // Nếu chưa nhập title thì lấy tên file
+    const videoTitle = formData.title || file.name;
+
+    const videoId = await uploadVideoToBunny(file, videoTitle);
+
+    if (videoId) {
+      setFormData({ ...formData, bunnyVideoId: videoId });
+      toast.success('Upload successful');
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Toast Loading
-    const toastId = toast.loading('Đang gửi thông tin...');
+
+    if (!formData.bunnyVideoId) {
+      toast.error("Please wait for the video to finish uploading!");
+      return;
+    }
+
+    const toastId = toast.loading("Sending information...");
 
     try {
-      // Gọi API Next.js (Server Action)
       const res = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error('Gửi thất bại');
+      if (!res.ok) throw new Error('Send failure');
 
-      toast.success('Đã gửi thành công! Admin sẽ duyệt video của bạn.', { id: toastId });
-      
+      toast.success("Submission successful! Admin will review the post.", { id: toastId });
+
       // Reset form
-      setFormData({ title: '', description: '', videoAssetId: '', authorName: '', authorEmail: '',status:'pending' });
+      setFormData({ title: '', description: '', bunnyVideoId: '', authorName: '', authorEmail: '' });
 
     } catch (error) {
-      toast.error('Có lỗi xảy ra. Vui lòng thử lại.', { id: toastId });
-    } finally {
-      setIsSubmitting(false);
+      toast.error("Error", { id: toastId });
     }
   };
 
   return (
     <div className={styles.container}>
-      
+
       {/* Header */}
       <div className={styles.header}>
         <h2>
@@ -75,33 +84,43 @@ export default function VideoUploadForm() {
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
-        
+
         {/* --- KHU VỰC UPLOAD --- */}
         <div className={styles.uploadArea}>
-           {/* Input file ẩn, luôn active trừ khi đang upload */}
            <input 
-             type="file" 
-             accept="video/*" 
-             onChange={handleFileChange}
-             disabled={uploading || !!formData.videoAssetId}
+             type="file" accept="video/*" onChange={handleFileChange}
+             disabled={uploading || !!formData.bunnyVideoId}
            />
            
            {uploading ? (
              <div className={styles.loadingState}>
                <FaSpinner className={styles.spinner} />
-               <span>Uploading video...</span>
+               <span>Uploading to Bunny... {progress}%</span>
+               {/* Progress bar visual */}
+               <div className="w-full h-1 bg-zinc-700 mt-2 rounded overflow-hidden">
+                  <div className="h-full bg-orange-600 transition-all duration-300" style={{ width: `${progress}%` }}></div>
+               </div>
              </div>
-           ) : formData.videoAssetId ? (
+           ) : formData.bunnyVideoId ? (
              <div className={styles.successState}>
                 <FaCheckCircle className={styles.checkIcon} />
-                <p className={styles.successText}>Video Ready!</p>
-                <p className={styles.fileName}>{formData.videoAssetId}</p>
+                <p className={styles.successText}>Video Uploaded!</p>
+                <p className={styles.fileName}>ID: {formData.bunnyVideoId}</p>
+                
+                {/* Nút Xóa / Upload lại */}
+                <button
+                   type="button"
+                   onClick={() => setFormData({ ...formData, bunnyVideoId: '' })}
+                   className={styles.anotherFile}  
+                >
+                   Upload another file
+                </button>
              </div>
            ) : (
              <div className={styles.defaultState}>
                <FaCloudUploadAlt className={styles.icon} />
-               <h3 className={styles.ctaText}>Drag & Drop or Click to Upload</h3>
-               <p className={styles.subText}>MP4, MOV (Max 500MB)</p>
+               <h3 className={styles.ctaText}>Drag & Drop Video</h3>
+               <p className={styles.subText}>Direct to Bunny Stream (Max 1GB)</p>
              </div>
            )}
         </div>
@@ -110,38 +129,38 @@ export default function VideoUploadForm() {
         <div className={styles.grid}>
           <div className={styles.field}>
             <label>Video Title</label>
-            <input 
+            <input
               type="text" required
               value={formData.title}
-              onChange={(e) => setFormData({...formData, title: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="E.g. Epic Thermal Shot..."
             />
           </div>
           <div className={styles.field}>
             <label>Tên của bạn</label>
-            <input 
+            <input
               type="text" required
               value={formData.authorName}
-              onChange={(e) => setFormData({...formData, authorName: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, authorName: e.target.value })}
               placeholder="E.g. John Doe"
             />
           </div>
         </div>
 
         <div className={styles.field}>
-            <label>Description</label>
-            <textarea 
-              rows={3}
-              value={formData.description}
-              onChange={(e) => setFormData({...formData, description: e.target.value})}
-              placeholder="Tell us about the context..."
-            />
+          <label>Description</label>
+          <textarea
+            rows={3}
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            placeholder="Tell us about the context..."
+          />
         </div>
 
         {/* --- NÚT SUBMIT --- */}
-        <button 
+        <button
           type="submit"
-          disabled={!formData.videoAssetId || isSubmitting}
+          disabled={!formData.bunnyVideoId || isSubmitting}
           className={styles.submitBtn}
         >
           <FaPaperPlane /> SEND FOOTAGE

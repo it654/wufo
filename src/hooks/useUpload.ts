@@ -1,46 +1,64 @@
 import { useState } from 'react';
+import * as tus from 'tus-js-client';
 import toast from 'react-hot-toast';
-import { client } from '../sanity/lib/client';
+
 export const useUpload = () => {
   const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0); // Thêm progress bar cho xịn
+  const [progress, setProgress] = useState(0);
 
-  const uploadFileToSanity = async (file: File): Promise<string | null> => {
-    if (!file) return null;
-    
-    // Validate
-    if (!file.type.startsWith('video/')) {
-      toast.error('Only videos are allowed to be uploaded!');
-      return null;
-    }
-    // Sanity giới hạn file size tùy gói (Free ~100MB, Plus ~2GB). Cẩn thận file quá lớn.
-    if (file.size > 100 * 1024 * 1024) { 
-      toast.error('The file is too large (Maximum 100MB)');
-      return null;
-    }
-
-    try {
+  const uploadVideoToBunny = async (file: File, title: string): Promise<string | null> => {
+    return new Promise(async (resolve, reject) => {
       setUploading(true);
-      setProgress(0);
-
-      // Upload lên Sanity
-      // Sanity client hỗ trợ Observable để theo dõi tiến độ, nhưng ở đây dùng promise cho đơn giản
-      const assetDocument = await client.assets.upload('file', file, {
-        filename: file.name,
-        contentType: file.type
+      
+      // 1. Gọi API lấy Signature
+      const res = await fetch('/api/bunny/sign', {
+        method: 'POST',
+        body: JSON.stringify({ title: title || file.name }),
       });
       
-      // Trả về ID của file (VD: file-123456...-mp4) để sau này liên kết
-      return assetDocument._id; 
+      const { videoId, libraryId, signature, expirationTime, error } = await res.json();
+      
+      if (error || !videoId) {
+        toast.error('Lỗi khởi tạo upload');
+        setUploading(false);
+        return resolve(null);
+      }
 
-    } catch (error: any) {
-      console.error('Upload Error:', error);
-      toast.error('Upload Error');
-      return null;
-    } finally {
-      setUploading(false);
-    }
+      // 2. Bắt đầu upload TUS với Signature
+      const upload = new tus.Upload(file, {
+        endpoint: 'https://video.bunnycdn.com/tusupload',
+        retryDelays: [0, 3000, 5000, 10000],
+        headers: {
+          // CÁC HEADER BẮT BUỘC CỦA BUNNY
+          'AuthorizationSignature': signature, // Chữ ký bảo mật
+          'AuthorizationExpire': expirationTime.toString(), // Thời gian hết hạn
+          'VideoId': videoId,
+          'LibraryId': libraryId.toString(),
+        },
+        metadata: {
+          filetype: file.type,
+          title: title || file.name,
+        },
+        onError: (error) => {
+          console.error('TUS Error:', error);
+          toast.error('Upload failed: ' + error.message);
+          setUploading(false);
+          resolve(null);
+        },
+        onProgress: (bytesUploaded, bytesTotal) => {
+          const percentage = (bytesUploaded / bytesTotal) * 100;
+          setProgress(Math.round(percentage));
+        },
+        onSuccess: () => {
+          toast.success('Upload successful!');
+          setUploading(false);
+          resolve(videoId);
+        },
+      });
+
+      upload.start();
+    });
   };
 
-  return { uploadFileToSanity, uploading, progress };
+  return { uploadVideoToBunny, uploading, progress };
 };

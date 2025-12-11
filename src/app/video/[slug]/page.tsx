@@ -14,7 +14,7 @@ import styles from './video-detail.module.scss';
 // ... (Các hàm getVideo, getRelatedVideos giữ nguyên) ...
 async function getVideo(slug: string) {
     const query = `*[_type == "archiveVideo" && slug.current == "${slug}"][0] {
-    _id, title, category, recordedAt, thumbnail,
+    _id, title, category, recordedAt, thumbnail,bunnyVideoId,
     technicalSpecs,
     "videoUrl": videoFile.asset->url,
     "size": videoFile.asset->size
@@ -25,7 +25,7 @@ async function getRelatedVideos(category: string, currentId: string) {
     const query = `*[_type == "archiveVideo" && category == "${category}" && _id != "${currentId}"] | order(recordedAt desc) [0...10] {
     _id, title, slug, thumbnail, recordedAt, category
   }`;
-     return await client.fetch(query, {}, { cache: 'no-store' });
+    return await client.fetch(query, {}, { cache: 'no-store' });
 }
 
 export default async function VideoDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -50,23 +50,18 @@ export default async function VideoDetailPage({ params }: { params: Promise<{ sl
 
                 {/* --- CỘT TRÁI --- */}
                 <div className={styles.leftColumn}>
-
                     {/* VIDEO PLAYER */}
                     <div className={styles.videoWrapper}>
-                        {video.videoUrl ? (
-                            <video
-                                controls
-                                autoPlay
-                                poster={video.thumbnail ? urlForImage(video.thumbnail).url() : undefined}
-                            >
-                                <source src={video.videoUrl} type="video/mp4" />
-                                Your browser does not support the video tag.
-                            </video>
+                        {video.bunnyVideoId ? (
+                            <iframe
+                                src={`https://iframe.mediadelivery.net/embed/${process.env.NEXT_PUBLIC_BUNNY_LIBRARY_ID}/${video.bunnyVideoId}?autoplay=true&loop=false&muted=false&preload=true`}
+                                loading="lazy"
+                                style={{ border: 'none', position: 'absolute', top: 0, height: '100%', width: '100%' }}
+                                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                                allowFullScreen={true}
+                            ></iframe>
                         ) : (
-                            <div className={styles.noSource}>
-                                <FileVideo size={48} opacity={0.5} />
-                                <p>Source File Unavailable</p>
-                            </div>
+                            <div className="text-white">Video not found</div>
                         )}
                     </div>
 

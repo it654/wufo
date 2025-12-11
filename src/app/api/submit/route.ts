@@ -22,11 +22,11 @@ export async function POST(request: Request) {
 });
   try {
     const body = await request.json();
-    const { title, description, videoAssetId, authorName, authorEmail } = body;
+    const { title, description, bunnyVideoId, authorName, authorEmail } = body;
 
     // Validate cơ bản
-    if (!title || !videoAssetId || !authorName) {
-      return NextResponse.json({ message: 'Thiếu thông tin bắt buộc' }, { status: 400 });
+    if (!title || !bunnyVideoId || !authorName) {
+      return NextResponse.json({ message: 'Missing required information' }, { status: 400 });
     }
 
     // Ghi vào Sanity
@@ -34,22 +34,15 @@ export async function POST(request: Request) {
       _type: 'submission', // Tên schema bạn vừa tạo
       title,
       description,
-      videoFile: {
-        _type: 'file',
-        asset: {
-          _type: 'reference',
-          _ref: videoAssetId // ID file trong Sanity
-        }
-      },
+      bunnyVideoId,
       authorName,
       authorEmail,
-      token: process.env.SANITY_API_TOKEN,
     });
 
-    return NextResponse.json({ message: 'Thành công', id: result._id }, { status: 201 });
+    return NextResponse.json({ message: 'Success', id: result._id }, { status: 201 });
 
   } catch (error: any) {
     console.error("Submission Error:", error);
-    return NextResponse.json({ message: 'Lỗi Server' }, { status: 500 });
+    return NextResponse.json({ message: 'Submission Error' }, { status: 500 });
   }
 }

@@ -1,8 +1,6 @@
-import { apiVersion, dataset, projectId,token } from '@/src/sanity/env';
 import { createClient } from 'next-sanity';
-
+import { apiVersion, dataset, projectId } from '@/src/sanity/env';
 import { NextResponse } from 'next/server';
-
 // Client có quyền GHI
 const writeClient = createClient({
   projectId,
@@ -12,6 +10,7 @@ const writeClient = createClient({
   useCdn: false,
 });
 
+const DEFAULT_IMAGE_ID = "image-f43c771593c43eed98e604d82db1009999ddcc70-1900x928-png"
 export async function POST(request: Request) {
   try {
     const { submissionId } = await request.json();
@@ -32,21 +31,30 @@ export async function POST(request: Request) {
     }
 
     // 2. Tạo bản ghi mới trong ArchiveVideo (Kho video gốc)
-    // Lưu ý: Chúng ta giữ nguyên tham chiếu đến file video (không cần upload lại)
     const newArchiveVideo = await writeClient.create({
       _type: 'archiveVideo',
       title: submission.title,
-      // Tạo slug từ tiêu đề (bạn có thể dùng thư viện slugify nếu muốn chuẩn hơn)
+      // Tạo slug tự động
       slug: { 
         _type: 'slug', 
-        current: submission.title.toLowerCase().replace(/\s+/g, '-').slice(0, 96) 
+        current: submission.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '').slice(0, 96) 
       },
-      category: 'community', // Gán vào danh mục "Cộng đồng" hoặc lấy từ submission nếu có
+      category: 'community', // Gán vào danh mục cộng đồng hoặc lấy từ submission nếu có
       description: submission.description,
-      videoFile: submission.videoFile, // Copy nguyên tham chiếu file video
+      
+      // --- SỬA ĐOẠN NÀY: LẤY BUNNY ID ---
+      bunnyVideoId: submission.bunnyVideoId, 
+      // ----------------------------------
+
+      thumbnail: {
+        _type: 'image',
+        asset: {
+          _type: 'reference',
+          _ref: DEFAULT_IMAGE_ID 
+        }
+      },
       recordedAt: new Date().toISOString(),
       status: 'Protected',
-      // Copy thông tin người gửi vào metadata (để ghi công)
       technicalSpecs: {
         camera: `Submitted by ${submission.authorName}`,
         resolution: 'Unknown',
