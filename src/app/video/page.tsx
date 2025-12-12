@@ -2,7 +2,18 @@ import Link from "next/link";
 import VideoCard from "@/src/components/video/VideoCard";
 import { client } from "@/src/sanity/lib/client";
 import styles from './video.module.scss';
-
+const CATEGORY_TITLES: Record<string, string> = {
+  'deale': 'Deale With Invasive Wild Boars',
+  'hunting': 'Hunting Documentary',
+  'wild': 'Wild Boar',
+  'farmingDoc': 'Farming Documentary',
+  'farmingTech': 'Farming Technology',
+  'automatic': 'Automatic Machines That Are At Another Level',
+  'agriculture': 'Modern Agriculture Machine',
+  'food': 'Food Processing',
+  'animal': 'Modern Animal Husbandry',
+  'agricultureTech': 'Agriculture Harvesting Technology',
+};
 
 async function getAllCategories() {
     const query = `*[_type == "archiveVideo" && defined(category)].category`;
@@ -43,7 +54,7 @@ const DynamicCategorySection = async ({ category }: { category: string }) => {
     // Format tên đẹp (viết hoa chữ đầu)
     console.log(videos);
     
-    const displayTitle = category.charAt(0).toUpperCase() + category.slice(1);
+    const displayTitle = CATEGORY_TITLES[category].toUpperCase() || category.toUpperCase();
     return <SectionGrid title={displayTitle} videos={videos} linkUrl={`/category/${category}`} />;
 };
 
