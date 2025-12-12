@@ -125,8 +125,7 @@ export default async function VideoDetailPage({ params }: { params: Promise<{ sl
                         </div>
 
                         <p className={styles.descText}>
-                            Video gốc lưu trữ phục vụ mục đích kháng cáo bản quyền (Content ID Verification).
-                            Vui lòng không reup khi chưa có sự cho phép.
+                            The original video is archived for copyright appeal purposes (Content ID Verification). Please do not re-upload without permission.
                         </p>
 
                         <div className={styles.techSpecs}>
