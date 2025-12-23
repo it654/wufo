@@ -1,14 +1,13 @@
 import Link from "next/link";
-import { FaCloudUploadAlt } from "react-icons/fa";
+import { FaCloudUploadAlt, FaRocket } from "react-icons/fa";
 // Import file style module
 import styles from './home.module.scss';
 import { client } from "../sanity/lib/client";
 import VideoCard from "../components/video/VideoCard";
-import ContactPage from "./contact/page";
-import SubmitVideo from "../components/ui/SubmitVideo/SubmitVideo";
 import VideoUploadForm from "../components/ui/VideoUploadForm/VideoUploadForm";
 import dynamic from 'next/dynamic';
 import HeroSearch from "../components/ui/Home/HeroSearch";
+import Image from "next/image";
 const ReactPlayer = dynamic(() => import('react-player'), { ssr: true });
 
 
@@ -40,11 +39,12 @@ async function getLatestVideos() {
 
 // 1. Hero Section
 const HeroSection = ({ heroVideo }: { heroVideo: any }) => {
-  const VIDEO_ID = "cbQvj9Ug-7Y"
+  const VIDEO_ID = "N3qI5G7jpus"
 
   return (
     <section className={styles.heroSection}>
-      <div className={styles.videoBackground}>
+        {/* Video nền: Bạn nên tải video sao trời loop về folder public */}
+        <div className={styles.videoBackground}>
         <ReactPlayer
           src={`https://www.youtube.com/watch?v=${VIDEO_ID}`}
           playing={true}     // Tự động chạy
@@ -73,28 +73,27 @@ const HeroSection = ({ heroVideo }: { heroVideo: any }) => {
         />
       </div>
 
-      <div className={styles.overlay}></div>
+        {/* Lớp phủ tối */}
+        <div className={styles.overlay}></div>
 
-      <div className={styles.heroContent}>
-        <h1>
-          MOUSE FARM <span>ARCHIVE</span>
-        </h1>
-        <p>
-          The definitive collection of thermal hunting, pest control, and high-precision field operations.
-        </p>
-        <HeroSearch />
-
-        {/* {heroVideo && (
-          <Link href={`/video/${heroVideo.slug.current}`} className={styles.ctaButton}>
-            Xem Video Mới Nhất
+        <div className={styles.heroContent}>
+          <span className={styles.tagline}>Archive Transmission</span>
+          <h1>
+            Exploring The <br />
+            <strong>Unknown Cosmos</strong>
+          </h1>
+          <p>
+            A journey to explore humanity's ultimate frontier. From distant exoplanets to the mysteries of cosmic black holes.
+          </p>
+          <Link href="/video" className={styles.ctaButton}>
+            Start The Journey <FaRocket />
           </Link>
-        )} */}
-      </div>
-    </section>
+        </div>
+      </section>
   );
 }
 // 2. Submit CTA
-const SubmitCTA = () => (
+/* const SubmitCTA = () => (
   <section className={styles.submitBar}>
     <div className={styles.container}>
       <FaCloudUploadAlt className={styles.icon} />
@@ -105,7 +104,7 @@ const SubmitCTA = () => (
       </Link>
     </div>
   </section>
-);
+); */
 
 // 3. Dynamic Section (Tái sử dụng cho cả Latest và Categories)
 const SectionGrid = ({ title, videos, linkUrl }: { title: string, videos: any[], linkUrl: string }) => {
@@ -138,48 +137,63 @@ const DynamicCategorySection = async ({ category }: { category: string }) => {
 
 const WelcomeSection = () => {
   return (
-    <section className={styles.welcomeSection}>
-      <div className={styles.welcomeContainer}>
-
-        {/* CỘT TRÁI: ẢNH MINH HỌA */}
-        <div className={styles.imageWrapper}>
-          {/* Thay src bằng ảnh thật của bạn */}
-          <img
-            src="https://images.unsplash.com/photo-1516724562728-afc824a36e84?q=80&w=2071&auto=format&fit=crop"
-            alt="Filming crew"
-          />
+    <section className={styles.section}>
+      <div className={styles.container}>
+        
+        {/* --- CỘT HÌNH ẢNH (Bên trái) --- */}
+        <div className={styles.visualColumn}>
+          {/* Vòng trang trí xoay tròn */}
+          <div className={styles.orbitCircle}></div>
+          
+          <div className={styles.imageWrapper}>
+            <Image 
+              // Thay ảnh đại diện kênh Wufo vào đây
+              src="https://images.unsplash.com/photo-1541873676-a18131494184?q=80&w=1000&auto=format&fit=crop" 
+              alt="Wufo Mission Commander"
+              fill
+              sizes="(max-width: 768px) 100vw, 350px"
+              priority
+            />
+          </div>
         </div>
 
-        {/* CỘT PHẢI: NỘI DUNG */}
-        <div className={styles.textContent}>
-
-          {/* Khối 1: WELCOME */}
-          <div className="mb-10">
-            <h2>Welcome</h2>
-            <p>
-              Mouse Farm Archive is the definitive source for high-quality hunting and pest control footage.
-              Our library features thousands of clips ranging from thermal night vision hunts to helicopter operations.
-              We capture the raw intensity of agricultural protection.
-            </p>
+        {/* --- CỘT NỘI DUNG (Bên phải) --- */}
+        <div className={styles.textColumn}>
+          <div className={styles.label}>
+             Incoming Transmission
           </div>
+          
+          <h2>
+            Decoding The <br />
+            <strong>Universe's Secrets</strong>
+          </h2>
+          
+          <p>
+            Welcome to Wufo Space Station. This is more than just a video archive; it's where we unravel the universe's greatest mysteries together: from the birth of stars to the stillness of supermassive black holes.
+          </p>
+          
+          <p>
+            Each documentary is a journey to find answers to the question:<em>"Are we alone in this universe?"</em>
+          </p>
 
-          {/* Khối 2: LICENSING */}
-          <div className={styles.licensingBlock}>
-            <h2>Licensing</h2>
-            <p>
-              We specialize in licensing and clearance of top-tier hunting content.
-              We have established relationships with brands, television studios, and news outlets to provide top-quality video for your projects.
-              <br /><br />
-              Browse for free or create an account for VIP Access to our library.
-            </p>
-
-            {/* Nút Liên Hệ */}
-            <Link href="/contact" className={styles.ctaButton}>
-              Contact Us
-            </Link>
+          {/* Social Proof / Stats */}
+          <div className={styles.statsGrid}>
+            <div className={styles.stat}>
+              <h4>500+</h4>
+              <span>Expeditions</span>
+            </div>
+            <div className={styles.stat}>
+              <h4>1.2M</h4>
+              <span>Explorers</span>
+            </div>
+            <div className={styles.stat}>
+              <h4>4K</h4>
+              <span>Resolution</span>
+            </div>
           </div>
 
         </div>
+
       </div>
     </section>
   );

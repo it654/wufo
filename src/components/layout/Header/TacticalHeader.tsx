@@ -30,9 +30,9 @@ export default function Header() {
         
         {/* LOGO */}
         <Link href="/" className={styles.logo}>
-          <img src="logo.png" alt="logo" style={{width:"100px"}}/>
+          {/* <img src="logo.png" alt="logo" style={{width:"100px"}}/> */}
           <h1>
-            MOUSE <span>FARM</span>
+            WUFO
           </h1>
         </Link>
 

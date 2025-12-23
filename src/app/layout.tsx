@@ -17,7 +17,7 @@ const jetbrains = JetBrains_Mono({
 
 const oswald = Oswald({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-oswald' });
 export const metadata: Metadata = {
-  title: "MOUSE FARM ARCHIVE | ORIGINAL SOURCE",
+  title: "WUFO | ORIGINAL SOURCE",
   description: "Official Original Video Archive. Content ID Protection & Source Storage. Unauthorized use is prohibited.",
   icons:"icon.png"
 };

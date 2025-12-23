@@ -2,7 +2,7 @@ import Image from "next/image";
 import styles from './about.module.scss';
 
 export const metadata = {
-  title: "About Us | Mouse Farm Archive",
+  title: "About Us | WUFO Archive",
   description: "The premier archive for hunting and pest control footage.",
 };
 
@@ -16,10 +16,10 @@ export default function AboutPage() {
           <div className={styles.heroText}>
             <h1>
               We are <br/>
-              <span>Mouse Farm</span>
+              <span>WUFO</span>
             </h1>
             <p>
-              Founded in 2016, Mouse Farm has evolved into the world's leading digital archive for raw hunting footage. 
+              Founded in 2016, WUFO has evolved into the world's leading digital archive for raw hunting footage. 
               We specialize in thermal vision operations, helicopter pest control, and high-precision trapping techniques.
             </p>
           </div>
@@ -27,8 +27,8 @@ export default function AboutPage() {
           <div className={styles.heroImage}>
             {/* Ảnh team/hoạt động (Bạn thay link ảnh thật vào đây) */}
             <Image 
-              src="https://images.unsplash.com/photo-1519802772250-a52a9af0eacb?q=80&w=2568&auto=format&fit=crop" 
-              alt="Mouse Farm Operations Team"
+              src="https://i.ibb.co/KccXPLkq/image1.jpg" 
+              alt="WUFO Operations Team"
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"

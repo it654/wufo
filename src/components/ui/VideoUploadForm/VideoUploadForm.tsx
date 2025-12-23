@@ -30,7 +30,7 @@ export default function VideoUploadForm() {
       
       if (videoId) {
         setFormData({ ...formData, bunnyVideoId: videoId, youtubeUrl: '' }); // Xóa youtube nếu có
-        toast.success('Upload thành công!');
+        toast.success('Upload successful!');
       }
     }
   };
@@ -40,8 +40,8 @@ export default function VideoUploadForm() {
     e.preventDefault();
     
     // Validate
-    if (activeTab === 'upload' && !formData.bunnyVideoId) return toast.error("Vui lòng upload video!");
-    if (activeTab === 'youtube' && !formData.youtubeUrl) return toast.error("Vui lòng dán link YouTube!");
+    if (activeTab === 'upload' && !formData.bunnyVideoId) return toast.error("Please upload the video!");
+    if (activeTab === 'youtube' && !formData.youtubeUrl) return toast.error("Please upload the video!");
 
     const toastId = toast.loading("Sending...");
 
@@ -54,12 +54,12 @@ export default function VideoUploadForm() {
 
       if (!res.ok) throw new Error('Failed');
 
-      toast.success("Gửi thành công!", { id: toastId });
+      toast.success("Sent successfully!", { id: toastId });
       // Reset form
       setFormData({ title: '', description: '', bunnyVideoId: '', youtubeUrl: '', authorName: '', authorEmail: '' });
 
     } catch (error) {
-      toast.error("Lỗi gửi form.", { id: toastId });
+      toast.error("Submission error!", { id: toastId });
     }
   };
 
@@ -67,8 +67,8 @@ export default function VideoUploadForm() {
     <div className={styles.container}>
       
       <div className={styles.header}>
-        <h2>Submit Your <span>Footage</span></h2>
-        <p>Chia sẻ video săn bắn ấn tượng của bạn.</p>
+        <h2>Submit <span>Observation</span></h2>
+        <p>Share your impressive space videos.</p>
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -180,7 +180,7 @@ export default function VideoUploadForm() {
           />
         </div>
         <button type="submit" className={styles.submitBtn}>
-          <FaPaperPlane /> SEND FOOTAGE
+          <FaPaperPlane /> SEND OBSERVATION
         </button>
 
       </form>

@@ -4,7 +4,7 @@
 $bg-color: #000000;
 $text-white: #ffffff;
 $text-gray: #a1a1aa; // zinc-400
-$accent-color: #3bbbf5; // orange-600
+$accent-color: #ea580c; // orange-600
 $border-color: #27272a; // zinc-800
 
 // Mixin cho Flex center
@@ -330,7 +330,7 @@ $border-color: #27272a; // zinc-800
 
     .ctaButton {
       display: inline-block;
-      background-color: #3bbbf5; // Màu đỏ đậm (giống nút Contact Us trong ảnh)
+      background-color: #ea580c; // Màu đỏ đậm (giống nút Contact Us trong ảnh)
       color: white;
       font-weight: 700;
       text-transform: uppercase;
@@ -362,5 +362,468 @@ $border-color: #27272a; // zinc-800
        color: white;
        margin-bottom: 1rem;
     }
+  }
+}
+
+/* src/styles/home.module.scss */
+
+// --- BIẾN MÀU & FONT ---
+$bg-deep: #050505;       // Đen sâu thẳm
+$bg-void: #000000;       // Đen tuyệt đối
+$accent-cyan: #ff8f53;   // Xanh Neon (Sci-fi)
+$accent-gold: #fbbf24;   // Vàng mặt trời
+$text-primary: #e2e8f0;  // Trắng bạc
+$text-dim: #94a3b8;      // Xám xanh
+
+// --- MIXINS ---
+@mixin glass-panel {
+  background: rgba(20, 20, 30, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+// --- GLOBAL CONTAINER ---
+.mainContainer {
+  background-color: $bg-deep;
+  color: $text-primary;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: 'Montserrat', sans-serif; // Bạn nên import font này ở layout
+}
+
+// --- 1. HERO SECTION ---
+.heroSection {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  // Video nền
+  .videoBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    opacity: 0.6; // Làm tối video để chữ nổi bật
+    filter: contrast(1.1) saturate(1.2);
+  }
+
+  // Lớp phủ gradient (Vignette)
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, $bg-deep 90%);
+    z-index: 1;
+  }
+
+  // Nội dung Hero
+  .heroContent {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 900px;
+    padding: 0 20px;
+
+    .tagline {
+      display: inline-block;
+      font-size: 0.875rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: $accent-cyan;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba($accent-cyan, 0.3);
+      padding: 8px 16px;
+      border-radius: 50px;
+      background: rgba($accent-cyan, 0.05);
+      backdrop-filter: blur(5px);
+    }
+
+    h1 {
+      font-size: 4rem; // Mobile: 2.5rem
+      font-weight: 200; // Mỏng (Thin)
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      
+      strong {
+        font-weight: 700;
+        color: white;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      }
+    }
+
+    p {
+      font-size: 1.125rem;
+      color: $text-dim;
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      line-height: 1.6;
+    }
+
+    .ctaButton {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 40px;
+      background: transparent;
+      border: 1px solid $text-primary;
+      color: $text-primary;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 0%; height: 100%;
+        background: $text-primary;
+        transition: width 0.3s ease;
+        z-index: -1;
+      }
+
+      &:hover {
+        color: black;
+        &::before { width: 100%; }
+      }
+    }
+  }
+}
+
+// --- 2. STATS BAR (Thanh chỉ số) ---
+.statsBar {
+  @include glass-panel;
+  display: flex;
+  justify-content: space-around;
+  padding: 2rem 0;
+  border-left: none; border-right: none;
+  margin-top: -80px; // Đè lên hero chút xíu
+  position: relative;
+  z-index: 20;
+
+  .statItem {
+    text-align: center;
+    .number {
+      display: block;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+    .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: $accent-cyan;
+    }
+  }
+}
+
+// --- 3. SECTIONS CHUNG ---
+.section {
+  padding: 6rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .sectionHeader {
+    margin-bottom: 3rem;
+    border-left: 2px solid $accent-cyan;
+    padding-left: 1.5rem;
+
+    h2 {
+      font-size: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 400;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      color: $text-dim;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// --- 4. VIDEO GRID (Lưới Video) ---
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.videoCard {
+  @include glass-panel;
+  border-radius: 4px; // Góc vuông hoặc bo nhẹ kiểu máy móc
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: $accent-cyan;
+    box-shadow: 0 0 30px rgba($accent-cyan, 0.15);
+
+    .playIcon {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .thumbnailWrapper {
+    position: relative;
+    aspect-ratio: 16/9;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.3s;
+    }
+
+    .playIcon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: white;
+      background: rgba(0,0,0,0.4);
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+  }
+
+  .cardContent {
+    padding: 1.5rem;
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: $accent-cyan;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: white;
+      line-height: 1.4;
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .desc {
+      font-size: 0.85rem;
+      color: $text-dim;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+}
+
+// --- RESPONSIVE ---
+@media (max-width: 768px) {
+  .heroSection {
+    .heroContent {
+      h1 { font-size: 2.5rem; }
+    }
+  }
+  .statsBar {
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 0;
+  }
+}
+/* src/components/home/welcome.module.scss */
+
+// --- VARIABLES ---
+$bg-dark: #050505;
+$accent-cyan: #ff8f53; // Xanh Neon đặc trưng
+$text-silver: #cbd5e1;
+$border-dim: rgba(255, 255, 255, 0.1);
+
+.section {
+  position: relative;
+  padding: 8rem 2rem;
+  background-color: $bg-dark;
+  overflow: hidden;
+
+  // Hiệu ứng nền lưới không gian (Grid Floor)
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    left: -50%;
+    width: 200%;
+    height: 100%;
+    background-image: 
+      linear-gradient(rgba($accent-cyan, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba($accent-cyan, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    transform: perspective(500px) rotateX(60deg);
+    opacity: 0.15;
+    pointer-events: none;
+    mask-image: linear-gradient(to top, black, transparent 60%);
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 4rem;
+  position: relative;
+  z-index: 10;
+}
+
+// --- CỘT HÌNH ẢNH (Avatar/Logo) ---
+.visualColumn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  // Vòng tròn quỹ đạo bao quanh ảnh
+  .orbitCircle {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border: 1px dashed rgba($accent-cyan, 0.2);
+    border-radius: 50%;
+    animation: spin 60s linear infinite;
+    z-index: 0;
+  }
+
+  .imageWrapper {
+    position: relative;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    z-index: 1;
+    // Hiệu ứng trôi nổi không trọng lực
+    animation: float 6s ease-in-out infinite; 
+    
+    // Viền phát sáng
+    box-shadow: 0 0 50px rgba($accent-cyan, 0.15);
+    border: 1px solid rgba($accent-cyan, 0.3);
+    
+    img {
+      border-radius: 50%;
+      object-fit: cover;
+      filter: grayscale(20%) contrast(1.1);
+    }
+  }
+}
+
+// --- CỘT NỘI DUNG (TEXT) ---
+.textColumn {
+  .label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: $accent-cyan;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 1.5rem;
+    
+    // Dấu chấm đỏ nhấp nháy (Recording/Live)
+    &::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background-color: $accent-cyan;
+      border-radius: 50%;
+      box-shadow: 0 0 10px $accent-cyan;
+    }
+  }
+
+  h2 {
+    font-size: 3rem;
+    line-height: 1.1;
+    color: white;
+    font-weight: 200; // Font mỏng Cinematic
+    margin-bottom: 2rem;
+
+    strong {
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: $text-silver;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  .statsGrid {
+    display: flex;
+    gap: 3rem;
+    border-top: 1px solid $border-dim;
+    padding-top: 2rem;
+
+    .stat {
+      h4 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.25rem;
+      }
+      span {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: $accent-cyan;
+        letter-spacing: 0.1em;
+      }
+    }
+  }
+}
+
+// --- ANIMATIONS ---
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// --- RESPONSIVE ---
+@media (max-width: 900px) {
+  .container { grid-template-columns: 1fr; text-align: center; }
+  .visualColumn { margin-bottom: 3rem; }
+  .textColumn {
+    .statsGrid { justify-content: center; }
   }
 }

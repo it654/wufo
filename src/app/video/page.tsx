@@ -3,16 +3,10 @@ import VideoCard from "@/src/components/video/VideoCard";
 import { client } from "@/src/sanity/lib/client";
 import styles from './video.module.scss';
 const CATEGORY_TITLES: Record<string, string> = {
-  'deale': 'Deale With Invasive Wild Boars',
-  'hunting': 'Hunting Documentary',
-  'wild': 'Wild Boar',
-  'farmingDoc': 'Farming Documentary',
-  'farmingTech': 'Farming Technology',
-  'automatic': 'Automatic Machines That Are At Another Level',
-  'agriculture': 'Modern Agriculture Machine',
-  'food': 'Food Processing',
-  'animal': 'Modern Animal Husbandry',
-  'agricultureTech': 'Agriculture Harvesting Technology',
+  'planet': 'Planet Surface - WUFO',
+  'moon': 'Moon Documentary',
+  'space': 'WUFO - Space Documentary',
+  'spaceDoc': 'Space Documentary',
 };
 
 async function getAllCategories() {

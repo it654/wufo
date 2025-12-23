@@ -20,9 +20,9 @@ export default function Footer() {
 
           {/* Logo */}
           <Link href="/" className={styles.logo}>
-            <img src="logo.png" alt="logo" />
+            {/* <img src="logo.png" alt="logo" /> */}
             <h1>
-              MOUSE<br /><span>FARM</span>
+              <span>WUFO</span>
             </h1>
           </Link>
 
@@ -53,7 +53,7 @@ export default function Footer() {
 
         {/* --- BOTTOM SECTION --- */}
         <div className={styles.bottomSection}>
-          <p>© 2024 Mouse Farm. All rights reserved.</p>
+          <p>© 2024 WUFO. All rights reserved.</p>
           <p>Designed by Sano Media</p>
         </div>
 

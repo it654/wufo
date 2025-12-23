@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com', // Cho phép ảnh Unsplash
       },
+      {
+        protocol: 'https',
+        hostname: 'i.ibb.co', // Cho phép ảnh Unsplash
+      },
     ],
   },
   
