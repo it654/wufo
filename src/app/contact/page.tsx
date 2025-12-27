@@ -47,11 +47,11 @@ export default function ContactPage() {
           {/* Số liệu kênh (Hard-code hoặc lấy từ API) */}
           <div className={styles.statsGrid}>
             <div className={styles.statItem}>
-              <h4>1.2M+</h4>
+              <h4>10k+</h4>
               <p>Subscribers</p>
             </div>
             <div className={styles.statItem}>
-              <h4>500M+</h4>
+              <h4>2M+</h4>
               <p>Total Views</p>
             </div>
             <div className={styles.statItem}>
@@ -59,7 +59,7 @@ export default function ContactPage() {
               <p>Top Audience</p>
             </div>
             <div className={styles.statItem}>
-              <h4>2016</h4>
+              <h4>2023</h4>
               <p>Established</p>
             </div>
           </div>
@@ -67,7 +67,7 @@ export default function ContactPage() {
           <div className={styles.contactDetails}>
             <h5>Direct Contact</h5>
             <a href="mailto:booking@mousefarm.com">booking@wufous</a>
-            <a href="https://youtube.com/@mousefarm" target="_blank" style={{ fontSize: '1rem', marginTop: '1rem' }}>
+            <a href="https://youtube.com/@wufous" target="_blank" style={{ fontSize: '1rem', marginTop: '1rem' }}>
               youtube.com/@wufous
             </a>
           </div>
