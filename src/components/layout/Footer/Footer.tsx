@@ -54,7 +54,7 @@ export default function Footer() {
         {/* --- BOTTOM SECTION --- */}
         <div className={styles.bottomSection}>
           <p>© 2024 WUFO. All rights reserved.</p>
-          <p>Designed by Sano Media</p>
+          {/* <p>Designed by Sano Media</p> */}
         </div>
 
       </div>
