@@ -66,9 +66,9 @@ export default function ContactPage() {
 
           <div className={styles.contactDetails}>
             <h5>Direct Contact</h5>
-            <a href="mailto:booking@mousefarm.com">booking@mousefarm.com</a>
+            <a href="mailto:booking@mousefarm.com">booking@wufous</a>
             <a href="https://youtube.com/@mousefarm" target="_blank" style={{ fontSize: '1rem', marginTop: '1rem' }}>
-              youtube.com/@mousefarm
+              youtube.com/@wufous
             </a>
           </div>
         </div>
